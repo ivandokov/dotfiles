@@ -19,4 +19,4 @@ git clone git@github.com:ivandokov/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
 
 ---
 
-*Inspired by [Dries Vints](https://github.com/driesvints/dotfiles).*
+*Inspired by [Dries Vints](https://github.com/driesvints/dotfiles) and [Freek Van der Herten](https://github.com/freekmurze/dotfiles).*

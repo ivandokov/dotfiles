@@ -1,0 +1,32 @@
+export PATH=vendor/bin:node_modules/.bin:$HOME/.composer/vendor/bin:$HOME/.npm-packages/bin:/usr/local/bin:$PATH
+
+export ZSH="$HOME/.oh-my-zsh"
+
+ZSH_THEME="dokov"
+
+HIST_STAMPS="dd/mm/yyyy"
+export HISTSIZE=32768
+export HISTFILESIZE=$HISTSIZE
+export HISTCONTROL=ignoredups
+export HISTIGNORE="ls:cd:cd -:pwd:date:* --help"
+export HISTORY_IGNORE="(ls|cd|cd -|pwd|date|* --help)"
+
+ZSH_CUSTOM=$HOME/.dotfiles/zsh/custom
+
+plugins=(git laravel composer)
+
+source $ZSH/oh-my-zsh.sh
+
+export LANG=en_US.UTF-8
+
+export EDITOR=nano
+
+export CLICOLOR=1
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+
+export GREP_OPTIONS="--color=auto"
+
+source $HOME/.dotfiles/zsh/aliases.zsh
+source $HOME/.dotfiles/zsh/functions.zsh
+
+[ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh

@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+sudo -v
+
+# Keep-alive: update existing `sudo` time stamp until installation has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+# Install brew
+if test ! $(which brew); then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+fi
+
+# Update Homebrew recipes
+brew update
+
+# Install all our dependencies with bundle (See Brewfile)
+brew tap homebrew/bundle
+brew bundle
+
+touch $HOME/.hushlogin
+
+# Install crontab entries
+crontab ./crontab
+
+# Launch mysql at start
+brew services start mysql
+
+# Set default MySQL root password and auth type.
+mysql -u root -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
+
+# Install PHP extensions with PECL
+printf "\n" | pecl install imagick
+pecl install redis
+
+# Install global Composer packages
+/usr/local/bin/composer global require laravel/installer laravel/valet
+
+# Install Laravel Valet
+$HOME/.composer/vendor/bin/valet install
+$HOME/.composer/vendor/bin/valet tld loc
+
+# Create a Code directory
+mkdir $HOME/Code
+cd $HOME/Code
+$HOME/.composer/vendor/bin/valet park
+cd -
+
+# Symlink the Mackup config file to the home directory
+ln -s $HOME/.dotfiles/mackup.cfg $HOME/.mackup.cfg
+
+# Install oh-my-zsh
+rm $HOME/.zshrc
+ln -s $HOME/.dotfiles/zsh/zshrc $HOME/.zshrc
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"

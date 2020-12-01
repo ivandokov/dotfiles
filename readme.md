@@ -17,6 +17,13 @@ git clone git@github.com:ivandokov/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
 - Clone all repositories by using `./git-clone.sh ~/Downloads/git-remote-dump.txt`
 - Restart the computer
 
+# 60Hz monitor
+Sometimes macOS limits the external displays to only 30Hz. To fix that use `cscreen`.  
+Find the display index with `cscreen -l` and then set the proper refresh rate with 
+```bash
+cscreen -d 32 -x 2560 -y 1440 -r 60 -s 1
+```
+
 ---
 
 *Inspired by [Dries Vints](https://github.com/driesvints/dotfiles) and [Freek Van der Herten](https://github.com/freekmurze/dotfiles).*

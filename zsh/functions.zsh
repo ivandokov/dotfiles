@@ -18,7 +18,7 @@ digall() {
 
 tinker() {
     while true; do
-        php artinsan tinker
+        php artisan tinker
     done
 }
 

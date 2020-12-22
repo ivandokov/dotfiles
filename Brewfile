@@ -57,6 +57,7 @@ cask 'the-unarchiver'
 cask 'viber'
 cask 'zoomus'
 cask 'whatsapp'
+cask 'balenaetcher'
 
 # Fonts
 cask 'font-jetbrains-mono'

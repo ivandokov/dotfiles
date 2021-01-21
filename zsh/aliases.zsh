@@ -11,6 +11,7 @@ alias gti='git'
 alias nah='git reset --hard && git clean -df'
 
 alias a='php artisan'
+alias s='sail'
 alias c='composer'
 alias cu='composer update'
 alias cr='composer require'

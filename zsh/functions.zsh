@@ -22,6 +22,18 @@ tinker() {
     done
 }
 
+function tw {
+    if [ $# -eq 0 ] || [ $1 = "." ]; then
+        TW_PATH=$(pwd)
+    else
+        TW_PATH=$1
+    fi
+
+    TW_PATH=$(echo -n $TW_PATH | base64)
+
+    open "tinkerwell://?cwd=$TW_PATH"
+}
+
 laralog() {
   tail -f -n 450 storage/logs/laravel*.log | \
   grep -i -E "^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next [\w\W]+?\:" --color

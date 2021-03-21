@@ -31,5 +31,8 @@ alias phpstorm='open -a /Applications/PhpStorm.app "`pwd`"'
 
 alias flush-redis="redis-cli FLUSHALL"
 
+alias btrestart='blueutil -p 0 && sleep 1 && blueutil -p 1'
+
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
+

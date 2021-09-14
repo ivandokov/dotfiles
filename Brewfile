@@ -49,6 +49,7 @@ cask 'viber'
 cask 'zoom'
 cask 'tunnelblick'
 cask 'balenaetcher'
+cask 'binance'
 
 # Fonts
 cask 'font-jetbrains-mono'

@@ -63,3 +63,7 @@ opendb() {
 
    open $DB_URL
 }
+
+repo() {
+    open `git config --get remote.origin.url | sed 's/:/\//' | sed 's/.git$//' | sed 's/git\@/https\:\/\//'`
+}

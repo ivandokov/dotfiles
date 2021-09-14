@@ -51,7 +51,7 @@ cask 'scroll-reverser'
 cask 'discord'
 cask 'the-unarchiver'
 cask 'viber'
-cask 'zoomus'
+cask 'zoom'
 cask 'tunnelblick'
 cask 'balenaetcher'
 

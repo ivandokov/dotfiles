@@ -13,8 +13,8 @@
 git clone git@github.com:ivandokov/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
 ./install
 ```
-- After Google Drive is installed launch it and start syncing so `Apps/Mackup` directory is synced. Then restore preferences by running `mackup restore`
-- Clone all repositories by using `./git-clone.sh ~/Downloads/git-remote-dump.txt`
+- In iCloud Drive download `Mackup` directory available offline. Then restore preferences by running `mackup restore`
+- Clone all repositories by using `~/.dotfiles/git-clone.sh /Users/ivan/Library/Mobile\ Documents/com~apple~CloudDocs/Mackup/git-remote-dump.txt`
 - Restart the computer
 
 ---

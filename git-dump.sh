@@ -14,6 +14,4 @@ for project in `find ~/Code -type d -d 1`; do
   fi
 done
 
-echo "$output" > ~/Code/git-remote-dump.txt
-
-echo "A file with all git remotes is created at ~/Code/git-remote-dump.txt"
+echo "$output" > /Users/ivan/Library/Mobile\ Documents/com~apple~CloudDocs/Mackup/git-remote-dump.txt

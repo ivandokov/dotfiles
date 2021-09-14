@@ -2,3 +2,4 @@ MAILTO=""
 18 11 * * 1,4 osascript -e 'display notification "Printing a color test page in 2 minutes." with title "Weekly print" sound name "Purr"' > /dev/null 2>&1
 20 11 * * 1,4 lp /Users/ivan/Documents/Printer/ColorCard.pdf >> /Users/ivan/.cronlog 2>&1
 0 20 * * * mackup backup -f > /dev/null 2>&1
+1 20 * * * /Users/ivan/.dotfiles/git-dump.sh > /dev/null 2>&1

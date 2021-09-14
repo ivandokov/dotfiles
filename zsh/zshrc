@@ -38,6 +38,5 @@ source $HOME/.dotfiles/zsh/functions.zsh
 
 [ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-autoload -Uz compinit && compinit
-autoload -U +X bashcompinit && bashcompinit
-complete -C /usr/local/etc/bash_completion.d/depy depy
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

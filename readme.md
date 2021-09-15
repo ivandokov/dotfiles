@@ -3,7 +3,6 @@
 - Did you remember to save all important documents from non-iCloud/Google Drive directories?
 - Did you remember to export important data from your local database?
 - Did you update [mackup](https://github.com/lra/mackup) to the latest version and ran `mackup backup`?
-- Run `./git-dump.sh` and copy the generated `~/Code/git-remote-dump.txt` file to the new computer
 
 # Installation
 - Install macOS Command Line Tools by running `xcode-select --install`

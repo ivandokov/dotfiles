@@ -24,6 +24,7 @@ brew 'imagemagick'
 brew 'mysql'
 brew 'nginx'
 brew 'redis'
+cask 'wkhtmltopdf'
 
 # Apps
 cask 'google-drive'

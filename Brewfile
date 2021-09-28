@@ -16,6 +16,7 @@ brew 'httpie'
 brew 'mackup'
 brew 'zsh-autosuggestions'
 brew 'blueutil'
+brew 'gh'
 
 # Development
 brew 'php'

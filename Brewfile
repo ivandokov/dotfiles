@@ -25,6 +25,7 @@ brew 'imagemagick'
 brew 'mysql'
 brew 'nginx'
 brew 'redis'
+brew 'ansible'
 cask 'wkhtmltopdf'
 
 # Apps

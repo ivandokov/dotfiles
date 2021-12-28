@@ -18,8 +18,6 @@ alias cr='composer require'
 alias ci='composer install'
 alias cda='composer dump-autoload -o'
 alias mfs='php artisan migrate:fresh --seed'
-alias p="phpunit"
-alias pf="phpunit --filter "
 
 alias fixpermissions="find . -type d -exec chmod 755 {} \; && find . -type f -exec chmod 644 {} \;"
 

@@ -22,6 +22,26 @@ tinker() {
     done
 }
 
+function p() {
+    if [ -f vendor/bin/pest ]; then
+        vendor/bin/pest "$@"
+    elif [ -f vendor/bin/phpunit ]; then
+        vendor/bin/phpunit "$@"
+    else
+        echo "Missing pest and phpunit!"
+    fi
+}
+
+function pf() {
+    if [ -f vendor/bin/pest ]; then
+        vendor/bin/pest --filter "$@"
+    elif [ -f vendor/bin/phpunit ]; then
+        vendor/bin/phpunit --filter "$@"
+    else
+        echo "Missing pest and phpunit!"
+    fi
+}
+
 function tw {
     if [ $# -eq 0 ] || [ $1 = "." ]; then
         TW_PATH=$(pwd)

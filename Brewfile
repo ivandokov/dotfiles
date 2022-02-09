@@ -55,6 +55,7 @@ cask 'zoom'
 cask 'tunnelblick'
 cask 'balenaetcher'
 cask 'binance'
+cask 'figma'
 
 # Fonts
 cask 'font-jetbrains-mono'

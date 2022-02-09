@@ -7,6 +7,11 @@ sudo -v
 # Keep-alive: update existing `sudo` time stamp until installation has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
+# Install rosetta
+if [[ `uname -m` == 'arm64' ]]; then
+    softwareupdate --install-rosetta
+fi
+
 # Install brew
 if test ! $(which brew); then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"

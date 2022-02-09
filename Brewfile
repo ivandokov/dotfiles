@@ -3,6 +3,7 @@ tap 'homebrew/cask'
 tap 'homebrew/cask-fonts'
 tap 'homebrew/cask-versions'
 tap 'ivandokov/homebrew-contrib'
+tap 'nicoverbruggen/homebrew-cask'
 
 # Tools
 brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
@@ -27,6 +28,7 @@ brew 'nginx'
 brew 'redis'
 brew 'ansible'
 cask 'wkhtmltopdf'
+cask 'phpmon'
 
 # Apps
 cask 'google-drive'

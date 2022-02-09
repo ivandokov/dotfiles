@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export PATH=/opt/homebrew/bin:$PATH
+
 sudo -v
 
 # Keep-alive: update existing `sudo` time stamp until installation has finished
@@ -26,14 +28,22 @@ crontab ./crontab
 brew services start mysql
 
 # Set default MySQL root password and auth type.
-mysql -u root -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
+if [[ `uname -m` == 'arm64' ]]; then
+    /opt/homebrew/bin/mysql -u root -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
+else
+    /usr/local/bin/mysql -u root -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
+fi
 
 # Install PHP extensions with PECL
 printf "\n" | pecl install imagick
 pecl install redis
 
 # Install global Composer packages
-/usr/local/bin/composer global require laravel/installer laravel/valet
+if [[ `uname -m` == 'arm64' ]]; then
+    /opt/homebrew/bin/composer global require laravel/installer laravel/valet
+else
+    /usr/local/bin/composer global require laravel/installer laravel/valet
+fi
 
 # Install Laravel Valet
 $HOME/.composer/vendor/bin/valet install

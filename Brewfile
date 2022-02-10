@@ -56,6 +56,7 @@ cask 'tunnelblick'
 cask 'balenaetcher'
 cask 'binance'
 cask 'figma'
+cask 'discord'
 
 # Fonts
 cask 'font-jetbrains-mono'

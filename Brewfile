@@ -29,6 +29,7 @@ brew 'redis'
 brew 'ansible'
 cask 'wkhtmltopdf'
 cask 'phpmon'
+cask 'docker'
 
 # Apps
 cask 'google-drive'

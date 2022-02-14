@@ -58,6 +58,7 @@ cask 'balenaetcher'
 cask 'binance'
 cask 'figma'
 cask 'discord'
+cask 'messenger'
 cask 'monitorcontrol'
 cask 'netspot'
 

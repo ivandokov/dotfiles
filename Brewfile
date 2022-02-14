@@ -58,6 +58,7 @@ cask 'balenaetcher'
 cask 'binance'
 cask 'figma'
 cask 'discord'
+cask 'monitorcontrol'
 
 # Fonts
 cask 'font-jetbrains-mono'

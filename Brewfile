@@ -59,6 +59,7 @@ cask 'binance'
 cask 'figma'
 cask 'discord'
 cask 'monitorcontrol'
+cask 'netspot'
 
 # Fonts
 cask 'font-jetbrains-mono'

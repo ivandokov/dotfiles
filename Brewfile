@@ -18,6 +18,7 @@ brew 'mackup'
 brew 'zsh-autosuggestions'
 brew 'blueutil'
 brew 'gh'
+brew 'btop'
 
 # Development
 brew 'php'

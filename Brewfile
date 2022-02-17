@@ -19,6 +19,7 @@ brew 'zsh-autosuggestions'
 brew 'blueutil'
 brew 'gh'
 brew 'btop'
+brew 'bat'
 
 # Development
 brew 'php'

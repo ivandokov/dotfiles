@@ -63,6 +63,7 @@ cask 'discord'
 cask 'messenger'
 cask 'monitorcontrol'
 cask 'netspot'
+cask 'plex'
 
 # Fonts
 cask 'font-jetbrains-mono'

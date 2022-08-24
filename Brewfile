@@ -2,6 +2,7 @@
 tap 'homebrew/cask'
 tap 'homebrew/cask-fonts'
 tap 'homebrew/cask-versions'
+tap 'homebrew/cask-drivers'
 tap 'ivandokov/homebrew-contrib'
 tap 'nicoverbruggen/homebrew-cask'
 
@@ -67,6 +68,7 @@ cask 'messenger'
 cask 'monitorcontrol'
 cask 'netspot'
 cask 'plex'
+cask 'garmin-basecamp'
 
 # Fonts
 cask 'font-jetbrains-mono'

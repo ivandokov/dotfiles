@@ -11,6 +11,7 @@ brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
 brew 'zsh'
 brew 'bash'
 brew 'git'
+brew 'git-lfs'
 brew 'svn' # Required to install some of the fonts
 brew 'nano'
 brew 'grep'

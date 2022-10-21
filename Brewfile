@@ -5,6 +5,7 @@ tap 'homebrew/cask-versions'
 tap 'homebrew/cask-drivers'
 tap 'ivandokov/homebrew-contrib'
 tap 'nicoverbruggen/homebrew-cask'
+tap 'teamookla/speedtest'
 
 # Tools
 brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
@@ -42,6 +43,7 @@ cask 'iterm2'
 cask 'karabiner-elements'
 cask 'imageoptim'
 brew 'ivandokov/contrib/phockup'
+brew 'speedtest'
 cask 'alfred'
 cask 'there'
 cask 'docker'

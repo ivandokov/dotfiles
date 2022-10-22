@@ -23,6 +23,7 @@ brew 'blueutil'
 brew 'gh'
 brew 'btop'
 brew 'bat'
+brew 'wget'
 
 # Development
 brew 'php'

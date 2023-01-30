@@ -3,3 +3,4 @@ MAILTO=""
 20 11 * * 1,4 lp /Users/ivan/Documents/Printer/ColorCard.pdf >> /Users/ivan/.cronlog 2>&1
 0 20 * * * mackup backup -f > /dev/null 2>&1
 1 20 * * * /Users/ivan/.dotfiles/git-dump.sh > /dev/null 2>&1
+1 20 * * * /Users/ivan/.dotfiles/mysql-dump.sh > /dev/null 2>&1

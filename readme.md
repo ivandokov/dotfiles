@@ -1,7 +1,7 @@
 # Before macOS wipe
 - Did you commit and push any changes/branches to your git repositories?
-- Did you remember to save all important documents from non-iCloud/Google Drive directories?
-- Did you remember to export important data from your local database?
+- Did you backup all important documents from non-iCloud/Google Drive directories?
+- Did you check if all databases are recently exported in `/Users/ivan/Library/Mobile\ Documents/com~apple~CloudDocs/Mackup/mysql`?
 - Did you update [mackup](https://github.com/lra/mackup) to the latest version and ran `mackup backup`?
 
 # Installation
@@ -14,6 +14,7 @@ git clone git@github.com:ivandokov/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
 ```
 - In iCloud Drive download `Mackup` directory available offline. Then restore preferences by running `mackup restore`
 - Clone all repositories by using `~/.dotfiles/git-clone.sh /Users/ivan/Library/Mobile\ Documents/com~apple~CloudDocs/Mackup/git-remote-dump.txt`
+- Import all of the required databases from `/Users/ivan/Library/Mobile\ Documents/com~apple~CloudDocs/Mackup/mysql`
 - Restart the computer
 
 ---

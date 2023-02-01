@@ -44,7 +44,7 @@ fi
 
 # Install PHP extensions with PECL
 printf "\n" | pecl install imagick
-pecl install redis
+printf "\n" | pecl install redis
 
 # Install global Composer packages
 if [[ `uname -m` == 'arm64' ]]; then

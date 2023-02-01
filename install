@@ -80,3 +80,9 @@ nvm install 16
 
 # Setup global gitignore
 git config --global core.excludesfile ~/.gitignore
+
+# Install Depy
+chown "$USER" /opt
+git clone https://github.com/ivandokov/depy.git /opt/depy
+cd /opt/depy
+./install

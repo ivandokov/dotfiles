@@ -16,6 +16,7 @@ brew 'git-lfs'
 brew 'svn' # Required to install some of the fonts
 brew 'nano'
 brew 'grep'
+brew 'rsync'
 brew 'httpie'
 brew 'mackup'
 brew 'zsh-autosuggestions'

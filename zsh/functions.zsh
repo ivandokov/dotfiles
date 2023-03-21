@@ -23,23 +23,11 @@ tinker() {
 }
 
 function p() {
-    if [ -f vendor/bin/pest ]; then
-        vendor/bin/pest "$@"
-    elif [ -f vendor/bin/phpunit ]; then
-        vendor/bin/phpunit "$@"
-    else
-        echo "Missing pest and phpunit!"
-    fi
+    php artisan test --compact
 }
 
 function pf() {
-    if [ -f vendor/bin/pest ]; then
-        vendor/bin/pest --filter "$@"
-    elif [ -f vendor/bin/phpunit ]; then
-        vendor/bin/phpunit --filter "$@"
-    else
-        echo "Missing pest and phpunit!"
-    fi
+    php artisan test --compact --filter "$@"
 }
 
 function tw {

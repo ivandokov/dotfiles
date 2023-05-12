@@ -25,8 +25,6 @@ alias key='cat ~/.ssh/id_rsa.pub | pbcopy'
 
 alias backup-photos='rsync -arv /Users/ivan/Pictures/Phockup/ /Volumes/3TB/Photos'
 
-alias phpstorm='open -a /Applications/PhpStorm.app "`pwd`"'
-
 alias flush-redis="redis-cli FLUSHALL"
 
 alias btrestart='blueutil -p 0 && sleep 1 && blueutil -p 1'

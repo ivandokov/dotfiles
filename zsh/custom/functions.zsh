@@ -77,7 +77,7 @@ repo() {
 }
 
 pstorm() {
-    open -na "PhpStorm.app" --args "$@"
+    phpstorm "$@"
 }
 
 # credit: http://nparikh.org/notes/zshrc.txt

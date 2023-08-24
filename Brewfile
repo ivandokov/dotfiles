@@ -13,6 +13,7 @@ brew 'zsh'
 brew 'bash'
 brew 'git'
 brew 'git-lfs'
+brew 'git-flow'
 brew 'svn' # Required to install some of the fonts
 brew 'nano'
 brew 'grep'

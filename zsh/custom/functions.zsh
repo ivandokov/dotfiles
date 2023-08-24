@@ -23,7 +23,7 @@ tinker() {
 }
 
 function p() {
-    php artisan test --compact
+    php artisan test --compact $@
 }
 
 function pf() {

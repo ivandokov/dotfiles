@@ -27,6 +27,7 @@ brew 'act'
 brew 'btop'
 brew 'bat'
 brew 'wget'
+brew 'fnm'
 
 # Development
 brew 'php'

@@ -6,7 +6,6 @@ alias dnsclear='dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 
 alias gut='git'
 alias got='git'
-alias gt='git'
 alias gti='git'
 alias nah='git reset --hard && git clean -df'
 

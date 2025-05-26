@@ -4,3 +4,5 @@ MAILTO=""
 0 20 * * * mackup backup -f > /dev/null 2>&1
 1 20 * * * /Users/ivan/.dotfiles/git-dump.sh > /dev/null 2>&1
 1 20 * * * /Users/ivan/.dotfiles/mysql-dump.sh > /dev/null 2>&1
+5 20 * * * find /Users/ivan/Code -type d -maxdepth 3 -name 'node_modules' -print0 | xargs -0 -n 1 tmutil addexclusion
+6 20 * * * find /Users/ivan/Code -type d -maxdepth 3 -name 'vendor' -print0 | xargs -0 -n 1 tmutil addexclusion

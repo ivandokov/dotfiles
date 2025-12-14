@@ -9,7 +9,7 @@ typeset +H c_lime="$FG[046]"
 typeset +H c_purple="$FG[201]"
 typeset +H c_yellow="$FG[184]"
 
-PS1='$c_aqua%~$(git_prompt_info) $c_lime%(!.#.›)%{$reset_color%} '
+PS1='$c_aqua %~$(git_prompt_info) $c_lime%(!.#.›)%{$reset_color%} '
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" $c_yellow"
 ZSH_THEME_GIT_PROMPT_CLEAN=""

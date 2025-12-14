@@ -63,6 +63,8 @@ cask 'garmin-basecamp'
 cask 'anydesk'
 cask 'orcaslicer'
 cask 'darktable'
+cask 'battle-net'
+cask 'autodesk-fusion'
 
 # Fonts
 cask 'font-jetbrains-mono'

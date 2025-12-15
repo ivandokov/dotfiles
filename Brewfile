@@ -29,6 +29,7 @@ brew 'bat'
 brew 'wget'
 brew 'fnm'
 cask 'rectangle'
+brew 'withgraphite/tap/graphite'
 
 # Development
 brew 'ansible'

@@ -36,6 +36,7 @@ brew 'withgraphite/tap/graphite'
 brew 'ansible'
 cask 'docker'
 cask 'herd'
+cask 'postman'
 
 # Apps
 cask 'google-drive'

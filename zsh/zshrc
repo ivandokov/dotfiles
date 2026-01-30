@@ -4,6 +4,7 @@ export PATH=.:\
 ./node_modules/.bin:\
 /opt/homebrew/sbin:\
 /opt/homebrew/bin:\
+$HOME/.local/bin:\
 $HOME/.config/phpmon/bin:\
 $HOME/.composer/vendor/bin:\
 $PATH

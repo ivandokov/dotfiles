@@ -20,7 +20,7 @@ alias mfs='php artisan migrate:fresh --seed'
 
 alias fixpermissions="find . -type d -exec chmod 755 {} \; && find . -type f -exec chmod 644 {} \;"
 
-alias key='cat ~/.ssh/id_rsa.pub | pbcopy'
+alias key='cat ~/.ssh/ivan_2026.pub | pbcopy'
 
 alias backup-photos='rsync -arv /Users/ivan/Pictures/Phockup/ /Volumes/3TB/Photos'
 

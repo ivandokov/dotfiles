@@ -32,6 +32,9 @@ crontab $HOME/.dotfiles/crontab
 # Create a Code directory
 mkdir -p $HOME/Code
 
+# Convenience symlink for the iCloud Drive root (used by tmux.conf for tmux-resurrect)
+ln -sfn "$HOME/Library/Mobile Documents/com~apple~CloudDocs" $HOME/iCloud
+
 # Symlink the Mackup config file to the home directory
 ln -sfn $HOME/.dotfiles/mackup.cfg $HOME/.mackup.cfg
 

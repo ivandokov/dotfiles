@@ -27,20 +27,28 @@ brew bundle
 touch $HOME/.hushlogin
 
 # Install crontab entries
-crontab ./crontab
+crontab $HOME/.dotfiles/crontab
 
 # Create a Code directory
-mkdir $HOME/Code
-cd $HOME/Code
-$HOME/.composer/vendor/bin/valet park
-cd -
+mkdir -p $HOME/Code
+(cd $HOME/Code && $HOME/.composer/vendor/bin/valet park)
 
 # Symlink the Mackup config file to the home directory
-ln -s $HOME/.dotfiles/mackup.cfg $HOME/.mackup.cfg
+ln -sfn $HOME/.dotfiles/mackup.cfg $HOME/.mackup.cfg
 
-# Install oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-rm $HOME/.zshrc
+# Install custom Mackup application definitions
+mkdir -p $HOME/.mackup
+for cfg in $HOME/.dotfiles/mackup/*.cfg; do
+    [ -f "$cfg" ] && ln -sfn "$cfg" "$HOME/.mackup/$(basename "$cfg")"
+done
+
+# Install oh-my-zsh (unattended so it does not chsh or exec into a new shell)
+if [ ! -d $HOME/.oh-my-zsh ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# Replace the default oh-my-zsh .zshrc with the dotfiles symlink
+rm -f $HOME/.zshrc
 ln -s $HOME/.dotfiles/zsh/zshrc $HOME/.zshrc
 
 # Setup global gitignore

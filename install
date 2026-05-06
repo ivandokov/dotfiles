@@ -31,7 +31,6 @@ crontab $HOME/.dotfiles/crontab
 
 # Create a Code directory
 mkdir -p $HOME/Code
-(cd $HOME/Code && $HOME/.composer/vendor/bin/valet park)
 
 # Symlink the Mackup config file to the home directory
 ln -sfn $HOME/.dotfiles/mackup.cfg $HOME/.mackup.cfg

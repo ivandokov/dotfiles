@@ -54,3 +54,15 @@ export NVM_DIR="/Users/ivan/Library/Application Support/Herd/config/nvm"
 
 # Herd injected PHP 7.4 configuration.
 export HERD_PHP_74_INI_SCAN_DIR="/Users/ivan/Library/Application Support/Herd/config/php/74/"
+
+# bun completions
+[ -s "/Users/ivan/.bun/_bun" ] && source "/Users/ivan/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/ivan/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions

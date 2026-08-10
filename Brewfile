@@ -30,7 +30,7 @@ brew 'wget'
 brew 'fnm'
 cask 'rectangle'
 brew 'mkcert'
-brew 'withgraphite/tap/graphite'
+cask 'raycast'
 
 # Development
 brew 'ansible'

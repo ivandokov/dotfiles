@@ -58,6 +58,18 @@ export HERD_PHP_74_INI_SCAN_DIR="/Users/ivan/Library/Application Support/Herd/co
 # bun completions
 [ -s "/Users/ivan/.bun/_bun" ] && source "/Users/ivan/.bun/_bun"
 
+# Make sure SSH_AUTH_SOCK is populated even when a shell is spawned without
+# inheriting it (tmux panes, Claude Code's bash tool, etc). Prefer the
+# macOS launchd-managed socket; fall back to the value tmux holds at the
+# server level if it has been updated by a previous SSH session.
+if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
+    if sock=$(launchctl getenv SSH_AUTH_SOCK 2>/dev/null) && [ -n "$sock" ]; then
+        export SSH_AUTH_SOCK="$sock"
+    elif command -v tmux >/dev/null 2>&1 && sock=$(tmux show-environment -g SSH_AUTH_SOCK 2>/dev/null | sed -n 's/^SSH_AUTH_SOCK=//p') && [ -n "$sock" ]; then
+        export SSH_AUTH_SOCK="$sock"
+    fi
+fi
+
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"

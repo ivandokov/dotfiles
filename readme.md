@@ -17,6 +17,65 @@ git clone git@github.com:ivandokov/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
 - Import all of the required databases from `/Users/ivan/Library/Mobile\ Documents/com~apple~CloudDocs/Mackup/mysql`
 - Restart the computer
 
+# Time Machine exclusions
+
+`tm-exclude-node-modules.sh` walks `~/Code`, `~/.paseo` and `~/.t3` and excludes every
+`node_modules` directory and every Composer `vendor` directory from Time Machine.
+It runs every 15 minutes via the `com.ivan.tm-exclude-node-modules` LaunchAgent.
+
+A few things worth knowing if you ever change it:
+
+* It writes the `com.apple.metadata:com_apple_backup_excludeItem` extended attribute
+  directly instead of calling `tmutil addexclusion`. `tmutil` round trips through
+  `backupd`, which costs about 11 seconds per call when the backup destination is a
+  network share. The direct write takes about 2 milliseconds.
+* Directories that already carry the attribute are filtered out inside `find` itself
+  with `-xattrname`, so a run with nothing new to do finishes in a couple of seconds.
+* There is no depth limit. Package level `node_modules` in a monorepo sit six or seven
+  levels deep, so a shallow search finds almost none of them.
+* A directory named `vendor` is only excluded when it contains `autoload.php` or a
+  `composer` subdirectory. Laravel keeps hand edited overrides in
+  `resources/views/vendor` and `resources/lang/vendor`, and published assets in
+  `public/vendor`. Those are source and must stay backed up.
+* A lock directory prevents two runs from overlapping.
+
+The LaunchAgent is used rather than a cron entry because cron silently skips any run
+scheduled while the machine is asleep, which on a laptop is most of them. `StartInterval`
+makes launchd run the job once shortly after wake if the interval elapsed during sleep.
+
+## Installing it
+
+`./install` does this automatically for every plist in `launchagents`. To do it by hand:
+
+```
+ln -sfn ~/.dotfiles/launchagents/com.ivan.tm-exclude-node-modules.plist \
+        ~/Library/LaunchAgents/com.ivan.tm-exclude-node-modules.plist
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.ivan.tm-exclude-node-modules.plist
+```
+
+`RunAtLoad` is set, so it runs once immediately. Check that it worked:
+
+```
+launchctl print gui/$(id -u)/com.ivan.tm-exclude-node-modules | grep -E "state|last exit code|runs"
+```
+
+Force a run without waiting for the interval:
+
+```
+launchctl kickstart -k gui/$(id -u)/com.ivan.tm-exclude-node-modules
+```
+
+Output goes to `/tmp/tm-exclude-node-modules.out` and `/tmp/tm-exclude-node-modules.err`.
+The script only logs when it actually excludes something, so an empty file is the normal
+steady state and does not mean it is broken.
+
+To remove it:
+
+```
+launchctl bootout gui/$(id -u)/com.ivan.tm-exclude-node-modules
+rm ~/Library/LaunchAgents/com.ivan.tm-exclude-node-modules.plist
+```
+
 ---
 
 *Inspired by [Dries Vints](https://github.com/driesvints/dotfiles) and [Freek Van der Herten](https://github.com/freekmurze/dotfiles).*

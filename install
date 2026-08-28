@@ -29,6 +29,16 @@ touch $HOME/.hushlogin
 # Install crontab entries
 crontab $HOME/.dotfiles/crontab
 
+# Install LaunchAgents (symlinked so repo edits take effect, then bootstrapped)
+mkdir -p $HOME/Library/LaunchAgents
+for plist in $HOME/.dotfiles/launchagents/*.plist; do
+    [ -f "$plist" ] || continue
+    label=$(basename "$plist" .plist)
+    ln -sfn "$plist" "$HOME/Library/LaunchAgents/$label.plist"
+    launchctl bootout "gui/$(id -u)/$label" 2>/dev/null
+    launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/$label.plist"
+done
+
 # Create a Code directory
 mkdir -p $HOME/Code
 

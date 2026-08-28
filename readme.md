@@ -43,6 +43,28 @@ The LaunchAgent is used rather than a cron entry because cron silently skips any
 scheduled while the machine is asleep, which on a laptop is most of them. `StartInterval`
 makes launchd run the job once shortly after wake if the interval elapsed during sleep.
 
+## Seeing what is excluded
+
+The System Settings panel will always say "No Excluded Items" for this setup, and that
+is expected rather than a fault. Time Machine has two kinds of exclusion. The panel only
+lists fixed path exclusions, which live in Time Machine's own preferences and are created
+with the `+` button or `tmutil addexclusion -p`. What this setup uses are sticky
+exclusions, which live as an extended attribute on the directory itself, follow it if it
+moves, and are invisible to that panel.
+
+Use `tm-exclusions.sh` to see them:
+
+```
+./tm-exclusions.sh              # the usual project roots
+./tm-exclusions.sh -s           # with sizes and a total
+./tm-exclusions.sh -a           # scan all of $HOME, slower
+./tm-exclusions.sh ~/some/path  # scan a specific path
+```
+
+It also prints any fixed path and volume exclusions, so it covers all three kinds in one
+place. To check a single directory, `tmutil isexcluded <path>` answers directly and is the
+same query Time Machine itself uses.
+
 ## Installing it
 
 `./install` does this automatically for every plist in `launchagents`. To do it by hand:

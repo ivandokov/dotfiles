@@ -19,9 +19,19 @@ git clone git@github.com:ivandokov/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
 
 # Time Machine exclusions
 
-`tm-exclude-node-modules.sh` walks `~/Code`, `~/.paseo` and `~/.t3` and excludes every
-`node_modules` directory and every Composer `vendor` directory from Time Machine.
-It runs every 15 minutes via the `com.ivan.tm-exclude-node-modules` LaunchAgent.
+`tm-exclude.sh` excludes regenerable and already replicated data from Time Machine.
+It runs every 15 minutes via the `com.ivan.tm-exclude` LaunchAgent.
+
+There are two kinds of rule in the script. Name rules scan `~/Code`, `~/.paseo` and
+`~/.t3` for `node_modules` and Composer `vendor` directories at any depth. Path rules
+exclude specific fixed locations: the Apple wallpaper video cache, Docker's VM disk
+image, the pnpm and npm caches, and `~/Library/CloudStorage`. Missing roots and paths
+are skipped, so the same list works on every machine.
+
+Nothing excluded is the only copy of anything. It is either rebuilt on demand or held
+somewhere else. Two consequences are worth knowing. Docker named volumes live inside the
+excluded disk image, so anything kept only in a volume is not backed up. Google Drive
+content is excluded on the basis that Drive itself holds it.
 
 A few things worth knowing if you ever change it:
 
@@ -37,6 +47,10 @@ A few things worth knowing if you ever change it:
   `composer` subdirectory. Laravel keeps hand edited overrides in
   `resources/views/vendor` and `resources/lang/vendor`, and published assets in
   `public/vendor`. Those are source and must stay backed up.
+* The exclusions are sticky, meaning they live on the directory rather than in a central
+  list. Ephemeral worktrees under `~/.paseo` and `~/.t3` therefore need no cleanup. They
+  simply take their exclusion with them when they are removed, and new ones are picked up
+  within 15 minutes.
 * A lock directory prevents two runs from overlapping.
 
 The LaunchAgent is used rather than a cron entry because cron silently skips any run
@@ -52,13 +66,13 @@ with the `+` button or `tmutil addexclusion -p`. What this setup uses are sticky
 exclusions, which live as an extended attribute on the directory itself, follow it if it
 moves, and are invisible to that panel.
 
-Use `tm-exclusions.sh` to see them:
+Use `tm-exclude-list.sh` to see them:
 
 ```
-./tm-exclusions.sh              # the usual project roots
-./tm-exclusions.sh -s           # with sizes and a total
-./tm-exclusions.sh -a           # scan all of $HOME, slower
-./tm-exclusions.sh ~/some/path  # scan a specific path
+./tm-exclude-list.sh              # all of $HOME, about 20 seconds
+./tm-exclude-list.sh -q           # quick, only the project roots
+./tm-exclude-list.sh -s           # with sizes and a total
+./tm-exclude-list.sh ~/some/path  # a specific path
 ```
 
 It also prints any fixed path and volume exclusions, so it covers all three kinds in one
@@ -70,32 +84,32 @@ same query Time Machine itself uses.
 `./install` does this automatically for every plist in `launchagents`. To do it by hand:
 
 ```
-ln -sfn ~/.dotfiles/launchagents/com.ivan.tm-exclude-node-modules.plist \
-        ~/Library/LaunchAgents/com.ivan.tm-exclude-node-modules.plist
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.ivan.tm-exclude-node-modules.plist
+ln -sfn ~/.dotfiles/launchagents/com.ivan.tm-exclude.plist \
+        ~/Library/LaunchAgents/com.ivan.tm-exclude.plist
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.ivan.tm-exclude.plist
 ```
 
 `RunAtLoad` is set, so it runs once immediately. Check that it worked:
 
 ```
-launchctl print gui/$(id -u)/com.ivan.tm-exclude-node-modules | grep -E "state|last exit code|runs"
+launchctl print gui/$(id -u)/com.ivan.tm-exclude | grep -E "state|last exit code|runs"
 ```
 
 Force a run without waiting for the interval:
 
 ```
-launchctl kickstart -k gui/$(id -u)/com.ivan.tm-exclude-node-modules
+launchctl kickstart -k gui/$(id -u)/com.ivan.tm-exclude
 ```
 
-Output goes to `/tmp/tm-exclude-node-modules.out` and `/tmp/tm-exclude-node-modules.err`.
-The script only logs when it actually excludes something, so an empty file is the normal
-steady state and does not mean it is broken.
+Output goes to `/tmp/tm-exclude.out` and `/tmp/tm-exclude.err`. The script only logs when
+it actually excludes something, so an empty file is the normal steady state and does not
+mean it is broken.
 
 To remove it:
 
 ```
-launchctl bootout gui/$(id -u)/com.ivan.tm-exclude-node-modules
-rm ~/Library/LaunchAgents/com.ivan.tm-exclude-node-modules.plist
+launchctl bootout gui/$(id -u)/com.ivan.tm-exclude
+rm ~/Library/LaunchAgents/com.ivan.tm-exclude.plist
 ```
 
 ---

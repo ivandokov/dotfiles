@@ -9,16 +9,16 @@
 # scan the filesystem. That is what this script does.
 #
 # Usage:
-#   tm-exclusions.sh              scan the usual project roots
-#   tm-exclusions.sh -a           scan all of $HOME (slower)
-#   tm-exclusions.sh PATH...      scan the given paths
-#   tm-exclusions.sh -s ...       add sizes and a total (slower)
+#   tm-exclude-list.sh              scan all of $HOME, about 20 seconds
+#   tm-exclude-list.sh -q           quick, only the project roots
+#   tm-exclude-list.sh -s           add sizes and a total, slower
+#   tm-exclude-list.sh PATH...      scan the given paths
 
 set -uo pipefail
 
 XATTR="com.apple.metadata:com_apple_backup_excludeItem"
 
-DEFAULT_ROOTS=(
+PROJECT_ROOTS=(
   "$HOME/Code"
   "$HOME/.paseo"
   "$HOME/.t3"
@@ -30,14 +30,15 @@ roots=()
 while [ $# -gt 0 ]; do
   case "$1" in
     -s) show_sizes=1 ;;
+    -q) roots=("${PROJECT_ROOTS[@]}") ;;
     -a) roots=("$HOME") ;;
-    -h|--help) sed -n '3,16p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '3,17p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *)  roots+=("$1") ;;
   esac
   shift
 done
 
-[ ${#roots[@]} -gt 0 ] || roots=("${DEFAULT_ROOTS[@]}")
+[ ${#roots[@]} -gt 0 ] || roots=("$HOME")
 
 echo "Fixed-path exclusions (these are what System Settings lists)"
 paths=$(defaults read /Library/Preferences/com.apple.TimeMachine.plist SkipPaths 2>/dev/null)
@@ -49,7 +50,6 @@ fi
 
 echo
 echo "Excluded volumes"
-vols=$(tmutil destinationinfo 2>/dev/null | grep -i "^Name" | sed 's/^/  /')
 excluded_vols=$(defaults read /Library/Preferences/com.apple.TimeMachine.plist ExcludedVolumeUUIDs 2>/dev/null)
 if [ -n "$excluded_vols" ]; then
   echo "$excluded_vols" | sed 's/^/  /'
@@ -61,7 +61,8 @@ echo
 echo "Sticky exclusions under: ${roots[*]}"
 
 # -prune at each match so the topmost excluded item is reported and its
-# contents are not walked.
+# contents are not walked. That is also what keeps a full $HOME scan quick,
+# since the biggest directories are the excluded ones.
 tmpfile=$(mktemp)
 trap 'rm -f "$tmpfile"' EXIT
 
@@ -80,17 +81,14 @@ fi
 if [ "$show_sizes" -eq 1 ]; then
   xargs -0 du -sk < "$tmpfile" 2>/dev/null \
     | sort -rn \
-    | awk '{
-        size = $1
-        $1 = ""
-        sub(/^ /, "")
-        total += size
-        if (size >= 1048576) printf "  %8.1f GiB  %s\n", size/1048576, $0
-        else                 printf "  %8.1f MiB  %s\n", size/1024, $0
+    | awk -F'\t' '{
+        total += $1
+        if ($1 >= 1048576) printf "  %8.1f GiB  %s\n", $1/1048576, $2
+        else               printf "  %8.1f MiB  %s\n", $1/1024, $2
       }
       END { printf "\n  %d items, %.1f GiB total\n", NR, total/1048576 }'
 else
-  xargs -0 -n 1 echo "  " < "$tmpfile" 2>/dev/null | sort
+  tr '\0' '\n' < "$tmpfile" | sort | sed 's/^/  /'
   echo
   echo "  $count items (pass -s for sizes)"
 fi

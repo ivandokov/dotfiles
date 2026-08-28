@@ -3,18 +3,18 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.ivan.tm-exclude-node-modules</string>
+    <string>com.ivan.tm-exclude</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/ivan/.dotfiles/tm-exclude-node-modules.sh</string>
+        <string>/Users/ivan/.dotfiles/tm-exclude.sh</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
     <key>StartInterval</key>
     <integer>900</integer>
     <key>StandardOutPath</key>
-    <string>/tmp/tm-exclude-node-modules.out</string>
+    <string>/tmp/tm-exclude.out</string>
     <key>StandardErrorPath</key>
-    <string>/tmp/tm-exclude-node-modules.err</string>
+    <string>/tmp/tm-exclude.err</string>
 </dict>
 </plist>

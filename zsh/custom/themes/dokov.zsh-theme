@@ -9,7 +9,13 @@ typeset +H c_lime="$FG[046]"
 typeset +H c_purple="$FG[201]"
 typeset +H c_yellow="$FG[184]"
 
-PS1='$c_aqua %~$(git_prompt_info) $c_lime%(!.#.›)%{$reset_color%} '
+# user@host only where it is not obvious: any non macOS machine, or a Mac reached over ssh
+typeset +H prompt_host=""
+if [[ "$OSTYPE" != darwin* || -n "$SSH_CONNECTION" ]]; then
+  prompt_host=" $c_green%n$c_blue@%m"
+fi
+
+PS1='$prompt_host$c_aqua %~$(git_prompt_info) $c_lime%(!.#.›)%{$reset_color%} '
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" $c_yellow"
 ZSH_THEME_GIT_PROMPT_CLEAN=""

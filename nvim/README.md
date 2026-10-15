@@ -6,8 +6,7 @@ This config is built on [LazyVim](https://lazyvim.org). LazyVim provides a well 
 
 1. Open a project from its root folder: `cd ~/Code/my-project && nvim`
 2. Do the built in lesson once. It takes about 30 minutes and teaches the keys everything else builds on: type `:Tutor` and press Enter.
-3. Sign in to GitHub Copilot once: open any file inside a git repository, type `:LspCopilotSignIn` and follow the prompt. Until you do this you will see a "Please sign in" message.
-4. Press `Space` and wait. A menu shows every shortcut, grouped by topic. This is the most useful key while you learn.
+3. Press `Space` and wait. A menu shows every shortcut, grouped by topic. This is the most useful key while you learn.
 
 `Space` is called the **leader** key. In this document `Space f r` means: press Space, then f, then r (one after another, not together).
 
@@ -74,16 +73,12 @@ Completion pops up while typing. `Enter` accepts the highlighted item, `Ctrl+n` 
 
 | What | Keys |
 | --- | --- |
-| Accept Copilot suggestion (grey text) | `Tab` |
-| Next / previous suggestion | `Alt+]` / `Alt+[` |
 | Open Claude Code next to the code | `Space a c` |
 | Send selection to Claude | select with `v`, then `Space a s` |
 | Add current file to Claude's context | `Space a b` |
 | Accept / reject a change Claude proposes | `Space a a` / `Space a d` |
 
 Claude Code running in a separate tmux or herdr pane can also connect to this Neovim: type `/ide` in Claude and pick Neovim. Claude then sees the file and selection you are on, and shows its edits as diffs in Neovim.
-
-Copilot is never attached to `.env` files or `auth.json`, so secrets are not sent for completions.
 
 ### Git
 
@@ -183,7 +178,6 @@ Add `_ide_helper.php`, `_ide_helper_models.php` and `.phpstorm.meta.php` to `.gi
 | `lua/plugins/laravel.lua` | laravel.nvim, blade-nav, Laravel completion |
 | `lua/plugins/web.lua` | HTML, Emmet, TypeScript and formatting rules |
 | `lua/plugins/git.lua` | Diff view |
-| `lua/plugins/ai.lua` | Copilot settings |
 | `lua/plugins/tmux.lua` | `Ctrl+h/j/k/l` across tmux panes |
 | `lua/user/laravel_gf.lua` | The Laravel aware `gf` |
 

@@ -63,6 +63,10 @@ fi
 rm -f $HOME/.zshrc
 ln -s $HOME/.dotfiles/zsh/zshrc $HOME/.zshrc
 
+# Symlink the Neovim config (XDG location)
+mkdir -p $HOME/.config
+ln -sfn $HOME/.dotfiles/nvim $HOME/.config/nvim
+
 # Setup global gitignore
 git config --global core.excludesfile ~/.gitignore
 

@@ -105,3 +105,14 @@ extract () {
         echo "'$1' is not a valid file"
     fi
 }
+
+# Usage: tunnel-neo [port ...]
+# Description: forwards local ports to the same ports on neo (default 4500), Ctrl-C to stop
+tunnel-neo() {
+    local ports=("${@:-4500}") args=() port
+    for port in "${ports[@]}"; do
+        args+=(-L "${port}:localhost:${port}")
+    done
+    echo "Tunnel to neo on port(s): ${ports[*]} (Ctrl-C to stop)"
+    ssh -N "${args[@]}" neo
+}

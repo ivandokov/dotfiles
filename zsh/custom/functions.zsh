@@ -116,3 +116,19 @@ tunnel-neo() {
     echo "Tunnel to neo on port(s): ${ports[*]} (Ctrl-C to stop)"
     ssh -N "${args[@]}" neo
 }
+
+# Usage: neo-auth-miguide, neo-auth-thinkalpha
+# Description: prints a T3 Code pairing link and QR code (valid 12h) for that account's server on neo and copies the link to the clipboard.
+# Paired sessions expire after 30 days, so rerun it when a client stops connecting.
+_neo-auth() {
+    local account=$1 out link
+    out=$(ssh "${account}@10.0.0.13" "t3 pair --ttl 12h") || return
+    echo "$out"
+    link=$(grep -o 'http[^[:space:]]*#token=[^[:space:]]*' <<< "$out" | head -1)
+    if [[ -n "$link" ]] && command -v pbcopy > /dev/null; then
+        printf %s "$link" | pbcopy
+        echo "Link copied to the clipboard. Treat it as a password."
+    fi
+}
+neo-auth-thinkalpha() { _neo-auth thinkalpha }
+neo-auth-miguide() { _neo-auth miguide }

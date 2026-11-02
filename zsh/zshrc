@@ -78,3 +78,7 @@ fpath=(/Users/ivan/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
 # End of Docker CLI completions
+
+
+# Herd injected PHP 8.6 configuration.
+export HERD_PHP_86_INI_SCAN_DIR="/Users/ivan/Library/Application Support/Herd/config/php/86"

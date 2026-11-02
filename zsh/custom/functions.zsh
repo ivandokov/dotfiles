@@ -132,3 +132,11 @@ _neo-auth() {
 }
 neo-auth-thinkalpha() { _neo-auth thinkalpha }
 neo-auth-miguide() { _neo-auth miguide }
+
+# Sync ~/.dotfiles with the other machines right now (see sync.sh)
+dot() {
+    case "$1" in
+        sync) ~/.dotfiles/sync.sh ;;
+        *) echo "usage: dot sync" ;;
+    esac
+}

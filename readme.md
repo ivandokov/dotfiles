@@ -17,6 +17,16 @@ git clone git@github.com:ivandokov/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
 - Import all of the required databases from `/Users/ivan/Library/Mobile\ Documents/com~apple~CloudDocs/Mackup/mysql`
 - Restart the computer
 
+# Syncing between machines
+
+`sync.sh` keeps the repository identical on every machine. It pulls with rebase, commits
+any local changes as `sync from <host>`, and pushes. It runs every 15 minutes via the
+`com.ivan.dotfiles-sync` LaunchAgent, so an edit on one Mac shows up on the other within
+half an hour. Run `dot sync` to do it right away.
+
+Conflicts are not resolved automatically. The script aborts the rebase and retries on the
+next run, so fix them by hand in `~/.dotfiles` when `/tmp/dotfiles-sync.out` reports one.
+
 # Time Machine exclusions
 
 `tm-exclude.sh` excludes regenerable and already replicated data from Time Machine.

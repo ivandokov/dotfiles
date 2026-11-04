@@ -12,6 +12,10 @@
 set -u
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+
+# Sync commits are unsigned. Signing needs the SSH key unlocked in an agent,
+# which a LaunchAgent cannot count on.
+export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=commit.gpgsign GIT_CONFIG_VALUE_0=false
 cd "$HOME/.dotfiles" || exit 1
 
 # Another git process (an interactive rebase, a merge) is in progress.

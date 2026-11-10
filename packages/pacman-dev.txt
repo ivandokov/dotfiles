@@ -1,0 +1,11 @@
+# The PHP and database side of the Laravel aliases and functions. Installed
+# only with `./install --dev`, because a desktop does not need it by default.
+# On macOS this is all handled by Herd instead.
+
+php
+php-fpm
+php-gd
+php-sqlite
+php-redis
+composer
+mariadb-clients

@@ -1,10 +1,49 @@
-# Before macOS wipe
+# Layout
+
+The repository covers macOS and Linux (Arch, in practice Omarchy). Everything
+shared sits at the top level, and the two platforms only diverge where they
+have to.
+
+```
+install              picks the installer for this OS and hands over
+install.darwin       Homebrew, Mackup, LaunchAgents, crontab, Rosetta
+install.linux        pacman, yay, systemd user timer, chsh
+lib/dotfiles.sh      symlink and oh-my-zsh helpers used by both
+Brewfile             macOS packages
+packages/pacman.txt  Arch packages
+packages/aur.txt     Arch packages that live in the AUR
+zsh/zshrc            the shared shell config
+zsh/zshrc.darwin     Homebrew paths, Herd, Docker Desktop, the launchd agent socket
+zsh/zshrc.linux      the ssh-agent, fnm
+zsh/custom/          aliases, functions and the theme, loaded by oh-my-zsh
+zsh/custom/os/<os>/  the aliases and functions that only work on one platform
+bin/push-ssh.sh      copies the SSH identity to another of my machines
+systemd/             the Linux equivalent of the dotfiles-sync LaunchAgent
+```
+
+`zsh/zshrc` detects the platform into `$DOTFILES_OS`, sources
+`zsh/zshrc.$DOTFILES_OS`, and then lets oh-my-zsh load `zsh/custom`.
+`zsh/custom/zz-os.zsh` is what pulls in `zsh/custom/os/$DOTFILES_OS/*.zsh`.
+oh-my-zsh only globs the top level of `$ZSH_CUSTOM`, so files in that
+subdirectory are not picked up by accident on the wrong platform, and the `zz-`
+prefix puts the loader last so a platform file can override a shared one.
+
+Two conventions are worth remembering when adding something:
+
+* Reach for oh-my-zsh's own `clipcopy` and `open_command` rather than `pbcopy`
+  and `open`. They already resolve to pbcopy, wl-copy, xclip or xdg-open as
+  appropriate.
+* `ip` is a core utility on Linux, so the function that prints the public
+  address is called `myip`. The short name is claimed as an alias on macOS
+  only.
+
+# Before a macOS wipe
 - Did you commit and push any changes/branches to your git repositories?
 - Did you backup all important documents from non-iCloud/Google Drive directories?
 - Did you check if all databases are recently exported in `/Users/ivan/Library/Mobile\ Documents/com~apple~CloudDocs/Mackup/mysql`?
 - Did you update [mackup](https://github.com/lra/mackup) to the latest version and ran `mackup backup`?
 
-# Installation
+# Installation on macOS
 - Install macOS Command Line Tools by running `xcode-select --install`
 - Download ssh keys to have access to git
 - Clone this repo and start the installation
@@ -17,15 +56,59 @@ git clone git@github.com:ivandokov/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
 - Import all of the required databases from `/Users/ivan/Library/Mobile\ Documents/com~apple~CloudDocs/Mackup/mysql`
 - Restart the computer
 
+# Installation on Omarchy
+
+Omarchy does not run an SSH server out of the box, so start it on the new
+machine before anything else:
+
+```
+sudo systemctl enable --now sshd
+sudo ufw allow 22/tcp && sudo ufw reload
+```
+
+Then, from a machine that already has the keys:
+
+```
+~/.dotfiles/bin/push-ssh.sh <host>
+```
+
+and on the Omarchy machine:
+
+```
+git clone git@github.com:ivandokov/dotfiles.git ~/.dotfiles && cd ~/.dotfiles
+./install
+```
+
+`./install` takes two options there:
+
+* `--dev` also installs PHP, Composer and the MySQL client, which the Laravel
+  aliases and the `db` and `opendb` functions need. It is off by default
+  because a desktop does not need a web stack. Herd covers this on macOS.
+* `--nvim` also points `~/.config/nvim` at this repository. It is off by
+  default because Omarchy ships a Neovim config of its own and replacing it is
+  a decision rather than an obvious default.
+
+Nothing is deleted. Anything standing where a symlink should go is moved aside
+with a `.bak-<timestamp>` suffix.
+
+Mackup, the LaunchAgents, the crontab and the Time Machine exclusions are
+macOS only and are skipped. The dotfiles sync runs from a systemd user timer
+instead, which `./install` enables.
+
 # Syncing between machines
 
 `sync.sh` keeps the repository identical on every machine. It pulls with rebase, commits
-any local changes as `sync from <host>`, and pushes. It runs every 15 minutes via the
-`com.ivan.dotfiles-sync` LaunchAgent, so an edit on one Mac shows up on the other within
-half an hour. Run `dot sync` to do it right away.
+any local changes as `sync from <host>`, and pushes. It runs every 15 minutes, from the
+`com.ivan.dotfiles-sync` LaunchAgent on macOS and the `dotfiles-sync.timer` user unit on
+Linux, so an edit on one machine shows up on the others within half an hour. Run
+`dot sync` to do it right away.
+
+Because it commits everything in the working tree, an unfinished edit left in
+`~/.dotfiles` is pushed on the next run like any other change.
 
 Conflicts are not resolved automatically. The script aborts the rebase and retries on the
 next run, so fix them by hand in `~/.dotfiles` when `/tmp/dotfiles-sync.out` reports one.
+On Linux the same output is in `journalctl --user -u dotfiles-sync`.
 
 # Time Machine exclusions
 

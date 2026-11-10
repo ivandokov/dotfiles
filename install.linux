@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+#
+# Linux installer, written for Arch and Omarchy. Run it through ./install
+# rather than directly.
+#
+#   ./install                  shell, tools, symlinks, sync timer
+#   ./install --dev            also PHP, Composer and the MySQL client
+#   ./install --nvim           also replace ~/.config/nvim with this repo's
+#
+# The Neovim config is opt in because Omarchy ships its own and replacing it is
+# a choice rather than an obvious default. Nothing is ever deleted: anything in
+# the way of a symlink is moved aside with a timestamp suffix.
+
+set -u
+
+DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+source "$DOTFILES/lib/dotfiles.sh"
+
+WITH_DEV=0
+WITH_NVIM=0
+for arg in "$@"; do
+    case "$arg" in
+        --dev)  WITH_DEV=1 ;;
+        --nvim) WITH_NVIM=1 ;;
+        *)      echo "Unknown option: $arg" >&2; exit 1 ;;
+    esac
+done
+
+if ! command -v pacman > /dev/null; then
+    echo "This installer expects Arch or an Arch derivative such as Omarchy." >&2
+    exit 1
+fi
+
+# read_list <file>
+# Prints the package names in file, dropping comments and blank lines.
+read_list() {
+    [ -f "$1" ] || return 0
+    sed 's/#.*//' "$1" | awk 'NF { print $1 }'
+}
+
+# install_pacman <file>
+#
+# Names are checked against the repositories first. A single unknown name makes
+# `pacman -S` refuse the whole transaction, and package names drift, so the
+# unknown ones are reported and the rest still get installed.
+install_pacman() {
+    local file=$1 name available=() missing=()
+
+    while read -r name; do
+        if pacman -Si -- "$name" > /dev/null 2>&1; then
+            available+=("$name")
+        else
+            missing+=("$name")
+        fi
+    done < <(read_list "$file")
+
+    if [ ${#missing[@]} -gt 0 ]; then
+        echo "  not in the repositories, skipped: ${missing[*]}"
+    fi
+    if [ ${#available[@]} -gt 0 ]; then
+        sudo pacman -S --needed --noconfirm -- "${available[@]}"
+    fi
+}
+
+sudo -v
+
+echo
+echo "== Packages =="
+sudo pacman -Sy
+install_pacman "$DOTFILES/packages/pacman.txt"
+
+if [ "$WITH_DEV" -eq 1 ]; then
+    echo
+    echo "== Development packages =="
+    install_pacman "$DOTFILES/packages/pacman-dev.txt"
+fi
+
+echo
+echo "== AUR =="
+if command -v yay > /dev/null; then
+    mapfile -t aur < <(read_list "$DOTFILES/packages/aur.txt")
+    [ ${#aur[@]} -gt 0 ] && yay -S --needed --noconfirm -- "${aur[@]}"
+else
+    echo "  yay not found, skipping $(read_list "$DOTFILES/packages/aur.txt" | tr '\n' ' ')"
+fi
+
+echo
+echo "== oh-my-zsh =="
+dotfiles_oh_my_zsh
+
+echo
+echo "== Symlinks =="
+dotfiles_link "$DOTFILES/zsh/zshrc" "$HOME/.zshrc"
+if [ "$WITH_NVIM" -eq 1 ]; then
+    dotfiles_link "$DOTFILES/nvim" "$HOME/.config/nvim"
+else
+    echo "  skip ~/.config/nvim (pass --nvim to replace Omarchy's own config)"
+fi
+
+dotfiles_link "$DOTFILES/gitconfig" "$HOME/.gitconfig"
+
+mkdir -p "$HOME/Code"
+
+echo
+echo "== Locale =="
+# zsh sets LANG=en_US.UTF-8 and complains on every start if Arch has not
+# generated it. Omarchy normally has, but a minimal install may not.
+if locale -a 2>/dev/null | grep -qiE '^en_US\.?utf-?8$'; then
+    echo "  ok   en_US.UTF-8"
+else
+    echo "  en_US.UTF-8 is not generated. Uncomment it in /etc/locale.gen and run:"
+    echo "    sudo locale-gen"
+fi
+
+echo
+echo "== Login shell =="
+zsh_path=$(command -v zsh)
+if [ "${SHELL:-}" = "$zsh_path" ]; then
+    echo "  ok   already $zsh_path"
+else
+    echo "  changing the login shell to $zsh_path"
+    chsh -s "$zsh_path"
+fi
+
+echo
+echo "== Dotfiles sync timer =="
+for unit in "$DOTFILES"/systemd/*.service "$DOTFILES"/systemd/*.timer; do
+    [ -f "$unit" ] || continue
+    dotfiles_link "$unit" "$HOME/.config/systemd/user/$(basename "$unit")"
+done
+systemctl --user daemon-reload
+systemctl --user enable --now dotfiles-sync.timer
+systemctl --user list-timers dotfiles-sync.timer --no-pager
+
+echo
+echo "Done. Open a new terminal, or run 'exec zsh', to pick up the new shell."

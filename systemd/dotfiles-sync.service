@@ -1,0 +1,7 @@
+[Unit]
+Description=Sync ~/.dotfiles with the other machines
+Documentation=https://github.com/ivandokov/dotfiles
+
+[Service]
+Type=oneshot
+ExecStart=%h/.dotfiles/sync.sh

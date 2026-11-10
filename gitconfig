@@ -1,0 +1,50 @@
+# Linux copy of ~/.gitconfig, symlinked into place by install.linux.
+#
+# On macOS the home directory copy is managed by Mackup instead, so this file
+# is not linked there and the two can drift. Keep them in step by hand.
+#
+# Paths are written with ~ so they resolve on both platforms.
+
+[user]
+	name = Ivan Dokov
+	email = ivandokov@users.noreply.github.com
+	signingkey = ~/.ssh/ivan_2026.pub
+[core]
+	ignorecase = false
+	autocrlf = input
+	editor = nano
+[push]
+	default = simple
+	autoSetupRemote = true
+[alias]
+	deploy = !git push && git checkout deploy && git rebase master && git push && git checkout master
+	s = !git status
+	c = !git commit -v
+	ca = !git commit -av
+	r = !git rebase
+	b = !git branch -a
+	p = !git push
+	pl = !git pull
+	plp = !git pull && git push
+	co = !git checkout
+	sup = !git submodule foreach git pull origin master && git submodule update
+	chs = !git diff $GIT_BRANCH@{1} $GIT_BRANCH
+	chss = !git diff --stat $GIT_BRANCH@{1} $GIT_BRANCH
+	lg1 = log --all --decorate --oneline --graph
+	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+	today = log --oneline --since 'today 9:00' --author 'Ivan Dokov'
+[help]
+	autocorrect = 5
+[pull]
+	rebase = false
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[init]
+	defaultBranch = master
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true

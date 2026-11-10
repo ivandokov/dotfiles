@@ -1,0 +1,5 @@
+# Installed with yay, which Omarchy ships. Skipped if yay is missing.
+
+fnm-bin
+act-bin
+gitflow-avh

@@ -1,0 +1,34 @@
+# Command line tools, installed with pacman on the base install.
+# Lines starting with # and blank lines are ignored.
+# Omarchy ships a lot of these already; --needed makes that a no-op.
+
+zsh
+zsh-autosuggestions
+zsh-completions
+git
+git-lfs
+github-cli
+openssh
+neovim
+nano
+tmux
+fzf
+zoxide
+eza
+fd
+bat
+btop
+ripgrep
+wget
+rsync
+httpie
+jq
+unzip
+zip
+p7zip
+zstd
+wl-clipboard
+xdg-utils
+ansible
+mkcert
+inetutils

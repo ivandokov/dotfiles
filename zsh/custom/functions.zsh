@@ -1,3 +1,9 @@
+# Functions that work on every machine.
+#
+# clipcopy and open_command come from oh-my-zsh and already know how to reach
+# the clipboard and the desktop handler on macOS, Wayland and X11, so nothing
+# here needs to call pbcopy or open directly.
+
 cpv() {
     rsync -WavP --human-readable --progress $1 $2
 }
@@ -6,9 +12,10 @@ git-delete-merged() {
     git branch -d `git branch --merged | grep -v '^*' | grep -v 'master' | tr -d '\n'`
 }
 
-ip() {
+# Not called ip: that is the name of a core networking utility on Linux.
+myip() {
     local ip=$(curl -s ipecho.net/plain)
-    echo $ip | pbcopy
+    printf %s "$ip" | clipcopy
     echo $ip
 }
 
@@ -30,18 +37,6 @@ function pf() {
     php artisan test --compact --filter "$@"
 }
 
-function tw {
-    if [ $# -eq 0 ] || [ $1 = "." ]; then
-        TW_PATH=$(pwd)
-    else
-        TW_PATH=$1
-    fi
-
-    TW_PATH=$(echo -n $TW_PATH | base64)
-
-    open "tinkerwell://?cwd=$TW_PATH"
-}
-
 laralog() {
   tail -f -n 450 storage/logs/laravel*.log | \
   grep -i -E "^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next [\w\W]+?\:" --color
@@ -58,7 +53,7 @@ db() {
 }
 
 opendb() {
-   [ ! -f .env ] && { echo "No .env file found."; exit 1; }
+   [ ! -f .env ] && { echo "No .env file found."; return 1; }
 
    DB_CONNECTION=$(grep DB_CONNECTION .env | grep -v -e '^\s*#' | cut -d '=' -f 2-)
    DB_HOST=$(grep DB_HOST .env | grep -v -e '^\s*#' | cut -d '=' -f 2-)
@@ -69,11 +64,11 @@ opendb() {
 
    DB_URL="${DB_CONNECTION}://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}"
 
-   open $DB_URL
+   open_command $DB_URL
 }
 
 repo() {
-    open `git config --get remote.origin.url | sed 's/:/\//' | sed 's/.git$//' | sed 's/git\@/https\:\/\//'`
+    open_command `git config --get remote.origin.url | sed 's/:/\//' | sed 's/.git$//' | sed 's/git\@/https\:\/\//'`
 }
 
 pstorm() {
@@ -88,6 +83,8 @@ extract () {
         case $1 in
             *.tar.bz2)  tar -jxvf $1                        ;;
             *.tar.gz)   tar -zxvf $1                        ;;
+            *.tar.xz)   tar -Jxvf $1                        ;;
+            *.tar.zst)  tar --zstd -xvf $1                   ;;
             *.bz2)      bunzip2 $1                          ;;
             *.gz)       gunzip $1                           ;;
             *.tar)      tar -xvf $1                         ;;
@@ -99,6 +96,7 @@ extract () {
             *.pax.Z)    uncompress $1 --stdout | pax -r     ;;
             *.Z)        uncompress $1                       ;;
             *.7z)       7z x $1                             ;;
+            *.zst)      unzstd $1                           ;;
             *)          echo "'$1' cannot be extracted"     ;;
         esac
     else
@@ -125,8 +123,8 @@ _neo-auth() {
     out=$(ssh "${account}@10.0.0.13" "t3 pair --ttl 12h") || return
     echo "$out"
     link=$(grep -o 'http[^[:space:]]*#token=[^[:space:]]*' <<< "$out" | head -1)
-    if [[ -n "$link" ]] && command -v pbcopy > /dev/null; then
-        printf %s "$link" | pbcopy
+    if [[ -n "$link" ]]; then
+        printf %s "$link" | clipcopy
         echo "Link copied to the clipboard. Treat it as a password."
     fi
 }

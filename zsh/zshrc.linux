@@ -1,0 +1,26 @@
+# Linux specific shell setup. Sourced from zsh/zshrc before oh-my-zsh.
+#
+# Written for Arch and Omarchy. Package manager installed tools already live in
+# /usr/bin, so there is far less PATH surgery to do than on macOS.
+
+fpath+=(
+    /usr/share/zsh/site-functions
+)
+
+# ssh-agent. Hyprland and systemd user sessions do not start one, so keep a
+# single long lived agent at a fixed socket. Keys added with ssh-add then
+# survive across terminals and reconnects until the next reboot.
+#
+# gnome-keyring or the systemd ssh-agent.service, if either is running, exports
+# SSH_AUTH_SOCK already and is left alone.
+if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
+    export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-$HOME/.ssh}/ssh-agent.sock"
+    ssh-add -l > /dev/null 2>&1
+    if [ $? -eq 2 ]; then
+        rm -f "$SSH_AUTH_SOCK"
+        eval "$(ssh-agent -a "$SSH_AUTH_SOCK")" > /dev/null
+    fi
+fi
+
+# fnm managed node, matching the macOS side.
+command -v fnm > /dev/null && eval "$(fnm env --use-on-cd --version-file-strategy=recursive --corepack-enabled --shell zsh)"

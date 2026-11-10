@@ -1,8 +1,7 @@
-alias l='ls -lFhG'
-alias ll='ls -laFhG'
-alias la='ll'
+# Aliases that work on every machine. The ls colour flags, and anything that
+# drives a macOS or Linux only tool, live in os/<os>/aliases.zsh.
 
-alias dnsclear='dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+alias la='ll'
 
 alias gut='git'
 alias got='git'
@@ -20,14 +19,13 @@ alias mfs='php artisan migrate:fresh --seed'
 
 alias fixpermissions="find . -type d -exec chmod 755 {} \; && find . -type f -exec chmod 644 {} \;"
 
-alias key='cat ~/.ssh/ivan_2026.pub | pbcopy'
-
-alias backup-photos='rsync -arv /Users/ivan/Pictures/Phockup/ /Volumes/3TB/Photos'
+alias key='cat ~/.ssh/ivan_2026.pub | clipcopy'
 
 alias flush-redis="redis-cli FLUSHALL"
 
-alias btrestart='blueutil -p 0 && sleep 1 && blueutil -p 1'
+# GREP_OPTIONS was removed from GNU grep, which now warns about it on every
+# call, so colour is requested per invocation instead.
+alias grep='grep --color=auto'
 
-# Enable aliases to be sudo’ed
+# Enable aliases to be sudo'ed
 alias sudo='sudo '
-

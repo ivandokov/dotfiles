@@ -1,0 +1,62 @@
+# macOS specific shell setup. Sourced from zsh/zshrc before oh-my-zsh.
+
+# Homebrew, GNU sed ahead of the BSD one, and PHP Monitor.
+path=(
+    /opt/homebrew/opt/gnu-sed/libexec/gnubin
+    /opt/homebrew/sbin
+    /opt/homebrew/bin
+    $HOME/.config/phpmon/bin
+    $path
+)
+
+fpath+=(
+    /opt/homebrew/share/zsh/site-functions
+    $HOME/.docker/completions
+)
+
+export CLICOLOR=1
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+
+# Herd injected PHP configuration.
+export HERD_PHP_74_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/74/"
+export HERD_PHP_84_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/84/"
+export HERD_PHP_85_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/85/"
+export HERD_PHP_86_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/86"
+
+# Herd injected PHP binary.
+path=("$HOME/Library/Application Support/Herd/bin/" $path)
+
+# Herd injected NVM configuration.
+export NVM_DIR="$HOME/Library/Application Support/Herd/config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+[[ -f "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh" ]] && builtin source "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh"
+
+# Re-assert fnm after Herd so fnm managed node wins PATH. Herd loads its own
+# nvm above and would otherwise shadow it.
+command -v fnm > /dev/null && eval "$(fnm env --use-on-cd --version-file-strategy=recursive --corepack-enabled --shell zsh)"
+
+# Docker Desktop.
+path+=("$HOME/.docker/bin")
+
+# Make sure SSH_AUTH_SOCK is populated even when a shell is spawned without
+# inheriting it (tmux panes, Claude Code's bash tool). Prefer the launchd
+# managed socket, then whatever the tmux server holds, then a long lived agent
+# of our own at a fixed socket so keys added with ssh-add survive new sessions.
+if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
+    if sock=$(launchctl getenv SSH_AUTH_SOCK 2>/dev/null) && [ -n "$sock" ]; then
+        export SSH_AUTH_SOCK="$sock"
+    elif command -v tmux > /dev/null 2>&1 && sock=$(tmux show-environment -g SSH_AUTH_SOCK 2>/dev/null | sed -n 's/^SSH_AUTH_SOCK=//p') && [ -n "$sock" ]; then
+        export SSH_AUTH_SOCK="$sock"
+    else
+        export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+        ssh-add -l > /dev/null 2>&1
+        if [ $? -eq 2 ]; then
+            rm -f "$SSH_AUTH_SOCK"
+            eval "$(ssh-agent -a "$SSH_AUTH_SOCK")" > /dev/null
+        fi
+    fi
+fi
+
+# JetBrains Toolbox command line launchers.
+path+=("$HOME/Library/Application Support/JetBrains/Toolbox/scripts")

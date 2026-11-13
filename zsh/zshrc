@@ -76,3 +76,7 @@ export BUN_INSTALL="$HOME/.bun"
 # Note for the future: installers that "inject" shell configuration (Herd,
 # Docker Desktop, bun, nvm) append to ~/.zshrc, which is a symlink to this
 # file. Move anything macOS specific that turns up below into zshrc.darwin.
+
+
+# Herd injected PHP 8.6 configuration.
+export HERD_PHP_86_INI_SCAN_DIR="/Users/ivan/Library/Application Support/Herd/config/php/86"
